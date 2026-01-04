@@ -1,11 +1,11 @@
 /**
  * Web Scrobbler connector for Telegram Audio Player
- * 
+ *
  * This connector enables Last.fm scrobbling for the Telegram Audio Player
  * (Telegram Audio Player) application.
- * 
+ *
  * Production URL: https://teleplay.rv7.nl/
- * 
+ *
  * @see https://github.com/web-scrobbler/web-scrobbler/wiki/Connectors-development
  */
 
@@ -58,7 +58,9 @@ Connector.trackArtSelector = '#now-playing-thumb img';
  * @returns {boolean} True if playing, false otherwise
  */
 Connector.isPlaying = () => {
-	const audioPlayer = document.querySelector('#audio-player') as HTMLAudioElement;
+	const audioPlayer = document.querySelector(
+		'#audio-player',
+	) as HTMLAudioElement;
 	return audioPlayer ? !audioPlayer.paused : false;
 };
 
@@ -67,7 +69,9 @@ Connector.isPlaying = () => {
  * @returns {number} Current time in seconds
  */
 Connector.getCurrentTime = () => {
-	const audioPlayer = document.querySelector('#audio-player') as HTMLAudioElement;
+	const audioPlayer = document.querySelector(
+		'#audio-player',
+	) as HTMLAudioElement;
 	return audioPlayer ? Math.floor(audioPlayer.currentTime) : 0;
 };
 
@@ -76,7 +80,9 @@ Connector.getCurrentTime = () => {
  * @returns {number} Duration in seconds
  */
 Connector.getDuration = () => {
-	const audioPlayer = document.querySelector('#audio-player') as HTMLAudioElement;
+	const audioPlayer = document.querySelector(
+		'#audio-player',
+	) as HTMLAudioElement;
 	return audioPlayer ? Math.floor(audioPlayer.duration) : 0;
 };
 
@@ -88,16 +94,20 @@ Connector.getDuration = () => {
 Connector.getUniqueID = () => {
 	const title = document.querySelector('#now-playing-title')?.textContent;
 	const artist = document.querySelector('#now-playing-artist')?.textContent;
-	const audioPlayer = document.querySelector('#audio-player') as HTMLAudioElement;
+	const audioPlayer = document.querySelector(
+		'#audio-player',
+	) as HTMLAudioElement;
 	const src = audioPlayer?.src || '';
-	
+
 	// Extract file ID from the blob URL or stream URL
 	// Format: blob:http://localhost:3040/uuid or /api/stream/fileId
 	const fileIdMatch = src.match(/\/stream\/([^/?]+)/);
 	const fileId = fileIdMatch ? fileIdMatch[1] : src;
-	
+
 	// Combine artist, title, and file ID for uniqueness
-	return `${artist || 'unknown'}-${title || 'unknown'}-${fileId}`.toLowerCase().replace(/\s+/g, '-');
+	return `${artist || 'unknown'}-${title || 'unknown'}-${fileId}`
+		.toLowerCase()
+		.replace(/\s+/g, '-');
 };
 
 /**
@@ -115,9 +125,7 @@ const filter = MetadataFilter.createFilter({
 	},
 	// Clean up artist names
 	artist: (text: string) => {
-		return text
-			.replace(/\s*\[.*?\]\s*/g, '')
-			.trim();
+		return text.replace(/\s*\[.*?\]\s*/g, '').trim();
 	},
 });
 
